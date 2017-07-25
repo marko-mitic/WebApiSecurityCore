@@ -32,6 +32,7 @@ namespace Library.API.Controllers
             _userManager = userManager;
         }
 
+        //this is a test
         //Returns 200 OK and an auth token if uName and pass exist in db, else returns 422 Unprocessable entity with a message that it's not valid u/p combination
         [Consumes("application/json")]
         [HttpPost("register")]
