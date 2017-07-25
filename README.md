@@ -117,7 +117,7 @@ Most of the security conserns of microservices when using NServiceBus are dealt 
 the transport and persistence layers that underlie NServiceBus. As for securing messages themselves, 
 there are two ways to achieve this. You can encrypt some specific properties of the message, or you can encrypt the whole message body.
 
-###Message Property Encryption
+### Encrypting message properties
 There are two ways to encrypt a specific property of a message. The first, conventional one, is to create and encryption service, ex RijendaelEncryptionService with a key indetifier and a key, and then call EnableMessagePropertyEncription on the endpointConfiguration instance and pass in the encryption service and the property information of the property/properties we  want to encrypt.
 Example:
 
@@ -160,7 +160,7 @@ public class MyMessage : IMessage
 }
 ```
 
-###Note about key indetifiers.
+### Note about key indetifiers.
 We pass in a list of keys in the RijndaelEncryptionService, and assign each of them a key identifier. 
 Identifiers should be unique, good examples are timestamps or GUIDs. Each message needs to carry it’s encryption key identifier in it’s header. If it doesn’t. NServiceBus will attempt to decrypt the message by using all of the keys it has in it’s configuration, and move the message to the error queue if none of the keys succeed to decrypt the message. Also, when using multiple keys, it’s possible to use new keys without changing the handlers, since NServiceBus will try to decrypt the message with the new keys that are added, but they do have to be added to the endpoint configuration in the receiving endpoint.
 
