@@ -21,36 +21,36 @@ Create a static class to hold options used when making the tokens,  and another 
 Example for TokenAuthOptions class
 
 ```C#
-    public static class TokenAuthOptions
-    {
-        public static string Audience { get; } = "ExampleAudience";
-        public static string Issuer { get; } = "ExampleIssuer";
-        public static RsaSecurityKey Key { get; } = new RsaSecurityKey(RSAKeyHelper.GenerateKey());
-        public static SigningCredentials SigningCredentials { get; } =
-            new SigningCredentials(Key, SecurityAlgorithms.RsaSha256Signature);
-        public static TimeSpan ExpiresSpan { get; } = TimeSpan.FromMinutes(30);
-    }
+public static class TokenAuthOptions
+{
+    public static string Audience { get; } = "ExampleAudience";
+    public static string Issuer { get; } = "ExampleIssuer";
+    public static RsaSecurityKey Key { get; } = new RsaSecurityKey(RSAKeyHelper.GenerateKey());
+    public static SigningCredentials SigningCredentials { get; } =
+        new SigningCredentials(Key, SecurityAlgorithms.RsaSha256Signature);
+    public static TimeSpan ExpiresSpan { get; } = TimeSpan.FromMinutes(30);
+}
 ```
 
 Example of an key helper class used for generating keys.
 
 ```C#
-    public static class RSAKeyHelper
-    {
-          public static RSAParameters GenerateKey()
+public static class RSAKeyHelper
+{
+      public static RSAParameters GenerateKey()
+      {
+          using (var key = new RSACryptoServiceProvider(2048))
           {
-              using (var key = new RSACryptoServiceProvider(2048))
-              {
-                  return key.ExportParameters(true);
-              }
+              return key.ExportParameters(true);
           }
-    }
+      }
+}
 ```
 
 Next, inside the ConfigureServices method in Startup class, we call AddAuthorization method on services  parameter, passing in the AuthorizationOptions object with some properties set that tell the server which type of Authroization is used. 
 Example code:
 
-```#
+```C#
 services.AddAuthorization(auth =>
 {
   auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
@@ -63,19 +63,19 @@ Next, in Configure method of the Startup class, we add the JwtBearer authenticat
 The example code:
 
 ```C#
-  var options = new JwtBearerOptions
+var options = new JwtBearerOptions
+{
+  TokenValidationParameters =
   {
-      TokenValidationParameters =
-      {
-          IssuerSigningKey = TokenAuthOptions.Key,
-          ValidAudience = TokenAuthOptions.Audience,
-          ValidIssuer = TokenAuthOptions.Issuer,
-          ValidateIssuerSigningKey = true,
-          ValidateLifetime = true,
-          ClockSkew = TimeSpan.FromMinutes(0)
-      }
-  };
-  app.UseJwtBearerAuthentication(options);
+      IssuerSigningKey = TokenAuthOptions.Key,
+      ValidAudience = TokenAuthOptions.Audience,
+      ValidIssuer = TokenAuthOptions.Issuer,
+      ValidateIssuerSigningKey = true,
+      ValidateLifetime = true,
+      ClockSkew = TimeSpan.FromMinutes(0)
+  }
+};
+app.UseJwtBearerAuthentication(options);
 ```
 
 Afterwards we add some sort of login controller to redirect anonymous users to, where they can get their auth token when they successfully log in. This can be some external provider, or we can use .net IdentityUser and UserManager.
