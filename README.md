@@ -176,4 +176,4 @@ Identifiers should be unique, good examples are timestamps or GUIDs. Each messag
 
 * [IndentityServer4](https://identityserver4.readthedocs.io/en/release/)
 
-* [Web Api 2.0 Security Course On PluralSight](https://app.pluralsight.com/player?course=webapi-v2-security&author=dominick-baier&name=webapi-v2-security-m2-httpsecurity)
+* [Web Api 2.0 Security Course On PluralSight](https://app.pluralsight.com/library/courses/webapi-v2-security/table-of-contents)
