@@ -9,7 +9,7 @@ For authorization in .net Core WebApi2, typically some sort of identity server i
 *	Facebook Login
 * Etc.
 
-When an anonymous user sends a request to a web api controller/method that is annotated with [Authorize], the method should either return 401 Unauthorised response, together with a redirect link to a login/register page if applicable. This can be and external(Google, Facebook,Twiter..) or an internal authorization provider.  When the user enters a u/p combination and successfully logs in, an authorization token is generated, typically with an expiry window, saved on the server and returned to the user. On subsequent requests, user needs to add the “Authorization” header, with <type> <token> for it’s value, ex : 
+When an anonymous user sends a request to a web api controller/method that is annotated with [Authorize], the method should return 401 Unauthorised response, together with a redirect link to a login/register page if applicable. This can be an external(Google, Facebook,Twiter..) or an internal authorization provider.  When the user enters a u/p combination and successfully logs in, an authorization token is generated, typically with an expiry window, saved on the server and returned to the user. On subsequent requests, user needs to add the “Authorization” header, with <type> <token> for it’s value, ex : 
 
 ```http
 Authorization: Bearer mZ1edKKACtPAb7zGlwSzvs72PvhAbGmB8K1ZrGxpcNM
@@ -78,7 +78,7 @@ var options = new JwtBearerOptions
 app.UseJwtBearerAuthentication(options);
 ```
 
-Afterwards we add some sort of login controller to redirect anonymous users to, where they can get their auth token when they successfully log in. This can be some external provider, or we can use .net IdentityUser and UserManager.
+Afterwards we implement a login controller, where we redirect users. They get an auth token when successfully log in. This can be some external provider, or we can use .net IdentityUser and UserManager.
 
 Also, we can use .net IdentityRole and RoleManager to authorize user access to specific parts of the application. This is done by adding Roles parameter to the Authorize annotation. Ex [Authorize(Roles = “administrator, manager, …)]. Roles have to exist in the database.
 
